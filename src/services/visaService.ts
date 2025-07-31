@@ -1,8 +1,11 @@
 import { config } from '../lib/config';
 
 export const visaService = {
-	getVisaInfoByCountry: async (countryCode: string): Promise<any> => {
-		const url = `${config.visaApi.baseUrl}/immigration/service/country/${countryCode}`;
+	getVisaInfoByCountry: async (countryCode: string, currencyCode?: string): Promise<any> => {
+		let url = `${config.visaApi.baseUrl}/visa/country/details/${countryCode}`;
+		if (currencyCode) {
+			url += `?currencyCode=${currencyCode}`;
+		}
 		try {
 			const response = await fetch(url, {
 				headers: {
@@ -12,8 +15,19 @@ export const visaService = {
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
 			}
-			const data = await response.json();
-			return data;
+			const rawData = await response.json();
+
+			// Transform the raw data into the expected structure
+			const formattedData = {
+				data: {
+					visaCountry: rawData.data?.visaCountry || null, // Assuming rawData.data.visaCountry contains the country details
+					visaNews: rawData.data?.visaNews || [],
+					visaFaq: rawData.data?.visaFaq || [],
+					visaTypes: rawData.data?.visaTypes || [],
+					bookingsCount: rawData.data?.bookingsCount || 0,
+				}
+			};
+			return formattedData;
 		} catch (error) {
 			console.error('Error fetching visa info:', error);
 			throw error;

@@ -7,7 +7,13 @@ const getVisaCountryParam = z.object({
 	countryCode: z
 		.string()
 		.describe(
-			"The ISO 3166-1 alpha-2 country code (e.g., 'US', 'GB').",
+			"The ISO 3166-1 alpha-2 country code (e.g., 'USA', 'GHA').",
+		),
+	currencyCode: z
+		.string()
+		.optional()
+		.describe(
+			"Optional currency code for the country, if applicable (e.g., 'USD', 'EUR').",
 		),
 });
 
@@ -19,36 +25,59 @@ export const getVisaInfoByCountry = {
 		parameters: getVisaCountryParam,
 		execute: async (params: getVisaCountryParam) => {
 			try {
-				const visaInfo = await visaService.getVisaInfoByCountry(
+				const visaInfoResponse = await visaService.getVisaInfoByCountry(
 					params.countryCode,
+					params.currencyCode,
 				);
 
-				// return dedent`
-				// 	Visa information for ${params.countryCode}:
-				// 	${JSON.stringify(visaInfo, null, 2)}
-				// `;
-	
-				// Rewriting the return text to be relevant to visa information
-				let formattedVisaInfo = `Visa information for ${params.countryCode}:\n`;
+				let formattedOutput = `Visa information for ${params.countryCode}:\n`;
 
-				if (visaInfo && visaInfo.data && Array.isArray(visaInfo.data.data)) {
-					if (visaInfo.data.data.length > 0) {
-						visaInfo.data.data.forEach((visa: any) => {
-							formattedVisaInfo += `\n- Visa Type: ${visa.visa_type || 'N/A'}`;
-							formattedVisaInfo += `\n  Requirements: ${visa.requirements || 'N/A'}`;
-							formattedVisaInfo += `\n  Validity: ${visa.validity || 'N/A'}`;
-							formattedVisaInfo += `\n  Notes: ${visa.notes || 'N/A'}`;
-						});
+				if (visaInfoResponse && visaInfoResponse.data) {
+					const { visaCountry, visaNews, visaFaq, visaTypes, bookingsCount } = visaInfoResponse.data;
+
+					if (visaCountry) {
+						formattedOutput += `\nCountry: ${visaCountry.name} (${visaCountry.country_code})`;
+						formattedOutput += `\nImage: ${visaCountry.image}`;
+						formattedOutput += `\nBanned Countries: ${visaCountry.banned.join(', ') || 'None'}`;
+						formattedOutput += `\nNo Visa Required For: ${visaCountry.no_visa.join(', ') || 'None'}`;
+						formattedOutput += `\nStatus: ${visaCountry.status}`;
 					} else {
-						formattedVisaInfo += "No specific visa information found for this country.";
+						formattedOutput += "\nNo country details found.";
 					}
+
+					if (visaNews && visaNews.length > 0) {
+						formattedOutput += "\n\nVisa News:";
+						visaNews.forEach((news: any) => {
+							formattedOutput += `\n- ${news.title || 'No title'}: ${news.content || 'No content'}`;
+						});
+					}
+
+					if (visaFaq && visaFaq.length > 0) {
+						formattedOutput += "\n\nVisa FAQ:";
+						visaFaq.forEach((faq: any) => {
+							formattedOutput += `\n- Question: ${faq.question || 'No question'}`;
+							formattedOutput += `\n  Answer: ${faq.answer || 'No answer'}`;
+						});
+					}
+
+					if (visaTypes && visaTypes.length > 0) {
+						formattedOutput += "\n\nVisa Types:";
+						visaTypes.forEach((type: any) => {
+							formattedOutput += `\n- Type: ${type.visa_type || 'N/A'}`;
+							formattedOutput += `\n  Requirements: ${type.requirements || 'N/A'}`;
+							formattedOutput += `\n  Validity: ${type.validity || 'N/A'}`;
+							formattedOutput += `\n  Notes: ${type.notes || 'N/A'}`;
+						});
+					}
+
+					formattedOutput += `\n\nTotal Bookings: ${bookingsCount}`;
+
 				} else {
-					formattedVisaInfo += "Could not retrieve detailed visa information.";
+					formattedOutput += "Could not retrieve visa information.";
 				}
 
-				return dedent`${formattedVisaInfo}`;
+				return dedent`${formattedOutput}`;
 			} catch (error) {
-				// Rewriting error messages to be relevant to visa information
 				if (error instanceof Error) {
 					return `Error fetching visa information for ${params.countryCode}: ${error.message}`;
 				}

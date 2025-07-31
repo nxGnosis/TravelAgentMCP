@@ -68,14 +68,7 @@ Retrieves detailed immigration information for a specified country.
 3.  **Configure Environment Variables**:
     Create a `.env` file in the root directory or set these variables in your environment:
 
-    ```bash
-    export VISA_API_KEY="your_visa_api_key_here"
-    export VISA_API_BASE_URL="your_visa_api_base_url_here"
-    export IMMIGRATION_API_KEY="your_immigration_api_key_here"
-    export IMMIGRATION_API_BASE_URL="your_immigration_api_base_url_here"
-    ```
-
-    _Note: Replace placeholders with your actual API keys and base URLs._
+    _Note: API keys and base URLs are not required for this service at the moment._
 
 4.  **Build the project**:
 
@@ -111,10 +104,5 @@ Common errors may include:
 - **API Errors**: Issues with the external APIs may result in errors. Check the server logs for more details.
 
 ## 🔑 Environment Variables
-
-- `VISA_API_KEY`: Your API key for the Visa information service (required).
-- `VISA_API_BASE_URL`: The base URL for the Visa information service (required).
-- `IMMIGRATION_API_KEY`: Your API key for the Immigration information service (required).
-- `IMMIGRATION_API_BASE_URL`: The base URL for the Immigration information service (required).
 
 This Travel Agent MCP server provides essential tools for accessing visa and immigration information, powered by robust external services.
