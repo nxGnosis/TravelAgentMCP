@@ -61,10 +61,15 @@ export const getVisaInfoByCountry = {
 				if (visaTypes && visaTypes.length > 0) {
 					formattedOutput += "\n\nVisa Types:";
 					visaTypes.forEach((type: any) => {
-						formattedOutput += `\n- Type: ${type.visa_type || "N/A"}`;
-						formattedOutput += `\n  Requirements: ${type.requirements || "N/A"}`;
-						formattedOutput += `\n  Validity: ${type.validity || "N/A"}`;
-						formattedOutput += `\n  Notes: ${type.notes || "N/A"}`;
+					formattedOutput += `\n- Type: ${type.name || "N/A"}`;
+					formattedOutput += `\n  Country Code: ${type.country_code || "N/A"}`;
+					formattedOutput += `\n  Base Code: ${type.base_code || "N/A"}`;
+					formattedOutput += `\n  Total Price: ${type.total_price || "N/A"}`;
+					formattedOutput += `\n  Status: ${type.status || "N/A"}`;
+					formattedOutput += `\n  Processing Fee: ${type.processing_fee || "N/A"}`;
+					formattedOutput += `\n  Government Fee: ${type.government_fee || "N/A"}`;
+					formattedOutput += `\n  Entry Type: ${type.entry_type || "N/A"}`;
+					formattedOutput += `\n  Validity Period: ${type.validity_period || "N/A"} days`;
 					});
 				}
 
