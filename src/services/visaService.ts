@@ -1,7 +1,10 @@
-import { config } from '../lib/config';
+import { config } from "../lib/config.js";
 
 export const visaService = {
-	getVisaInfoByCountry: async (countryCode: string, currencyCode?: string): Promise<any> => {
+	getVisaInfoByCountry: async (
+		countryCode: string,
+		currencyCode?: string,
+	): Promise<any> => {
 		let url = `${config.visaApi.baseUrl}/visa/country/details/${countryCode}`;
 		if (currencyCode) {
 			url += `?currencyCode=${currencyCode}`;
@@ -9,7 +12,7 @@ export const visaService = {
 		try {
 			const response = await fetch(url, {
 				headers: {
-					'x-api-key': config.visaApi.apiKey,
+					"x-api-key": config.visaApi.apiKey,
 				},
 			});
 			if (!response.ok) {
@@ -25,11 +28,11 @@ export const visaService = {
 					visaFaq: rawData.data?.visaFaq || [],
 					visaTypes: rawData.data?.visaTypes || [],
 					bookingsCount: rawData.data?.bookingsCount || 0,
-				}
+				},
 			};
 			return formattedData;
 		} catch (error) {
-			console.error('Error fetching visa info:', error);
+			console.error("Error fetching visa info:", error);
 			throw error;
 		}
 	},

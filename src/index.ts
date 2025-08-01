@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { FastMCP } from "fastmcp";
-import { getVisaInfoByCountry } from "./tools/visa-tools/getVisaInfoByCountry.js";
 import { getImmigrationInfoByCountry } from "./tools/immigration-tools/getimmigrationByCountry.js";
+import { getVisaInfoByCountry } from "./tools/visa-tools/getVisaInfoByCountry.js";
 
 async function main() {
 	console.log("Initializing Travel Agent MCP Server...");

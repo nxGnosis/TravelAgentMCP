@@ -10,7 +10,7 @@ export const config = {
 		defaultCurrency: "USD", // Default currency for transactions
 	},
 	immigrationApi: {
-		baseUrl: "https://immigration.api.gov",
+		baseUrl: "https://agile-scrubland-71136-72b75abf9926.herokuapp.com/api/v1",
 		apiKey: process.env.IMMIGRATION_API_KEY || "",
 		defaultRegion: "US", // Default region
 	},

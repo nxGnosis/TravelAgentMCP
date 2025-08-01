@@ -1,4 +1,4 @@
-import { config } from '../lib/config';
+import { config } from "../lib/config.js";
 
 export const immigrationService = {
 	getImmigrationInfoByCountry: async (countryCode: string): Promise<any> => {
@@ -6,7 +6,7 @@ export const immigrationService = {
 		try {
 			const response = await fetch(url, {
 				headers: {
-					'x-api-key': config.immigrationApi.apiKey,
+					"x-api-key": config.immigrationApi.apiKey,
 				},
 			});
 			if (!response.ok) {
@@ -15,7 +15,7 @@ export const immigrationService = {
 			const data = await response.json();
 			return data;
 		} catch (error) {
-			console.error('Error fetching immigration info:', error);
+			console.error("Error fetching immigration info:", error);
 			throw error;
 		}
 	},
