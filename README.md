@@ -2,6 +2,10 @@
 
 An MCP (Model Context Protocol) server for retrieving visa and immigration information for various countries.
 
+<a href="https://glama.ai/mcp/servers/@nxGnosis/TravelAgentMCP">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@nxGnosis/TravelAgentMCP/badge" alt="Travel Agent Server MCP server" />
+</a>
+
 ## ℹ️ About
 
 This server provides tools to access up-to-date visa and immigration details, helping users plan their international travel with ease. It leverages external APIs to fetch accurate information.
