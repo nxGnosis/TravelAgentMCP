@@ -5,7 +5,7 @@ import { visaService } from "../../services/visaService.js";
 const getVisaCountryParam = z.object({
 	countryCode: z
 		.string()
-		.describe("The ISO 3166-1 alpha-2 country code (e.g., 'USA', 'GHA')."),
+		.describe("The ISO 3166-1 alpha-3 country code (e.g., 'USA', 'GHA')."),
 	currencyCode: z
 		.string()
 		.optional()
@@ -27,74 +27,82 @@ export const getVisaInfoByCountry = {
 				params.currencyCode,
 			);
 
-			let formattedOutput = `Visa information for ${params.countryCode}:\n`;
+			let formattedOutput = `🛂 Visa information for ${params.countryCode}:\n`;
 
 			if (visaInfoResponse && visaInfoResponse.data) {
-				const { visaCountry, visaNews, visaFaq, visaTypes, bookingsCount } =
-					visaInfoResponse.data;
-
+				const { visaCountry, visaNews, visaFaq, visaTypes, bookingsCount } = visaInfoResponse.data;
+				
+				// Country Information
 				if (visaCountry) {
-					formattedOutput += `\nCountry: ${visaCountry.name} (${visaCountry.country_code})`;
-					formattedOutput += `\nImage: ${visaCountry.image}`;
-					formattedOutput += `\nBanned Countries: ${visaCountry.banned.join(", ") || "None"}`;
-					formattedOutput += `\nNo Visa Required For: ${visaCountry.no_visa.join(", ") || "None"}`;
-					formattedOutput += `\nStatus: ${visaCountry.status}`;
+				  formattedOutput += `\n🌍 Country: ${visaCountry.name} (${visaCountry.country_code})`;
+				  formattedOutput += `\n📸 Image: ${visaCountry.image || "N/A"}`;
+				  formattedOutput += `\n👥 Banned Countries: ${visaCountry.banned?.join(", ") || "None"}`;
+				  formattedOutput += `\n✈️ No Visa Required For: ${visaCountry.no_visa?.join(", ") || "None"}`;
+				  formattedOutput += `\n⚠️ Status: ${visaCountry.status || "N/A"}`;
 				} else {
-					formattedOutput += "\nNo country details found.";
+				  formattedOutput += "\nNo country details found.";
 				}
-
+			  
+				// Visa News
 				if (visaNews && visaNews.length > 0) {
-					formattedOutput += "\n\nVisa News:";
-					visaNews.forEach((news: any) => {
-						formattedOutput += `\n- ${news.title || "No title"}: ${news.content || "No content"}`;
-					});
+				  formattedOutput += "\n\n📰 Visa News:";
+				  visaNews.forEach((news:any) => {
+					formattedOutput += `\n  - ${news.title || "No title"}: ${news.content || "No content"}`;
+				  });
 				}
-
+			  
+				// Visa FAQ
 				if (visaFaq && visaFaq.length > 0) {
-					formattedOutput += "\n\nVisa FAQ:";
-					visaFaq.forEach((faq: any) => {
-						formattedOutput += `\n- Question: ${faq.question || "No question"}`;
-						formattedOutput += `\n  Answer: ${faq.answer || "No answer"}`;
-					});
+				  formattedOutput += "\n\n📚 Visa FAQ:";
+				  visaFaq.forEach((faq:any) => {
+					formattedOutput += `\n  - 💬 Question: ${faq.question || "No question"}`;
+					formattedOutput += `\n    💬 Answer: ${faq.answer || "No answer"}`;
+				  });
 				}
-
+			  
+				// Visa Types
 				if (visaTypes && visaTypes.length > 0) {
-					formattedOutput += "\n\nVisa Types:";
-					visaTypes.forEach((type: any) => {
-					formattedOutput += `\n- Type: ${type.name || "N/A"}`;
-					formattedOutput += `\n  Country Code: ${type.country_code || "N/A"}`;
-					formattedOutput += `\n  Base Code: ${type.base_code || "N/A"}`;
-					formattedOutput += `\n  Total Price: ${type.total_price || "N/A"}`;
-					formattedOutput += `\n  Status: ${type.status || "N/A"}`;
-					formattedOutput += `\n  Processing Fee: ${type.processing_fee || "N/A"}`;
-					formattedOutput += `\n  Government Fee: ${type.government_fee || "N/A"}`;
-					formattedOutput += `\n  Entry Type: ${type.entry_type || "N/A"}`;
-					formattedOutput += `\n  Validity Period: ${type.validity_period || "N/A"} days`;
+				  formattedOutput += "\n\n🎟️ Visa Types:";
+				  visaTypes.forEach((type:any) => {
+					formattedOutput += `\nVisa Type: ${type.name || "N/A"}`;
+					formattedOutput += `\n🌍 Country Code: ${type.country_code || "N/A"}`;
+					formattedOutput += `\n#️⃣ Base Code: ${type.base_code || "N/A"}`;
+					formattedOutput += `\n💰 Total Price: $${type.total_price || "N/A"}`;
+					formattedOutput += `\n💰 Processing Fee: $${type.processing_fee || "N/A"}`;
+					formattedOutput += `\n💰 Government Fee: $${type.government_fee || "N/A"}`;
+					formattedOutput += `\n💼 Entry Type: ${type.entry_type || "N/A"}`;
+					formattedOutput += `\n⏰ Validity Period: ${type.validity_period || "N/A"} days`;
+					formattedOutput += `\n✅ Status: ${type.status || "N/A"}`;
+			  
 					if (type.keyRequirements && type.keyRequirements.length > 0) {
-						formattedOutput += "\n    Key Requirements:";
-						type.keyRequirements.forEach((req: any) => {
-							formattedOutput += `\n    - ${req.requirement || "N/A"}`;
-						});
+					  formattedOutput += "\n📄 Key Requirements:";
+					  type.keyRequirements.forEach((req:any) => {
+						formattedOutput += `\n  - ${req.requirement || "N/A"}`;
+					  });
 					}
+			  
 					if (type.benefits && type.benefits.length > 0) {
-						formattedOutput += "\n    Benefits:";
-						type.benefits.forEach((benefit: any) => {
-							formattedOutput += `\n    - ${benefit.benefit || "N/A"}`;
-						});
+					  formattedOutput += "\n⭐ Benefits:";
+					  type.benefits.forEach((benefit:any) => {
+						formattedOutput += `\n  - ${benefit.benefit || "N/A"}`;
+					  });
 					}
+			  
 					if (type.additionalRequirements && type.additionalRequirements.length > 0) {
-						formattedOutput += "\n    Additional Requirements:";
-						type.additionalRequirements.forEach((additionalRequirements: any) => {
-							formattedOutput += `\n    - ${additionalRequirements.question || "N/A"}`;
-						});
+					  formattedOutput += "\n⚠️ Additional Requirements:";
+					  type.additionalRequirements.forEach((additionalRequirement:any) => {
+						formattedOutput += `\n  - ${additionalRequirement.question || "N/A"}`;
+					  });
 					}
-					});
+			  
+					formattedOutput += "\n---\n"; // Add separator between visa types
+				  });
 				}
-
-				formattedOutput += `\n\nTotal Bookings: ${bookingsCount}`;
-			} else {
+			  
+				formattedOutput += `\n🛒 Total Bookings: ${bookingsCount || 0}`;
+			  } else {
 				formattedOutput += "Could not retrieve visa information.";
-			}
+			  }
 
 			return dedent`${formattedOutput}`;
 		} catch (error) {

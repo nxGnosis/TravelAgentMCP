@@ -21,48 +21,42 @@ export const getImmigrationInfoByCountry = {
 					params.countryCode,
 				);
 
-			// return dedent`
-			// 	Immigration information for ${params.countryCode}:
-			// 	${JSON.stringify(immigrationInfo, null, 2)}
-			// `;
-
-			// Rewriting the return text to be relevant to immigration information
-			let formattedImmigrationInfo = `Immigration information for ${params.countryCode}:\n`;
+			let formattedImmigrationInfo = `💼 Immigration information for ${params.countryCode}:\n`;
 
 			if (
 				immigrationInfo && immigrationInfo.data && Array.isArray(immigrationInfo.data.data)
 			) {
 				if (immigrationInfo.data.data.length > 0) {
-					immigrationInfo.data.data.forEach((service: any) => {
-						formattedImmigrationInfo += `\nService: ${service.name || "N/A"}`;
-						formattedImmigrationInfo += `\n  Description: ${service.description || "N/A"}`;
-						formattedImmigrationInfo += `\n  Consultation Note: ${service.consultation_note || "N/A"}`;
-
-						if (Array.isArray(service.countries)) {
-							service.countries.forEach((countryInfo: any) => {
-								if (countryInfo.country_code === params.countryCode) {
-									formattedImmigrationInfo += `\n  Country: ${countryInfo.country_code || "N/A"}`;
-									formattedImmigrationInfo += `\n    Consultation Fee: ${countryInfo.consultation_fee || "N/A"}`;
-									formattedImmigrationInfo += `\n    Service Fee: ${countryInfo.service_fee || "N/A"}`;
-
-									if (Array.isArray(countryInfo.requirements) && countryInfo.requirements.length > 0) {
-										formattedImmigrationInfo += "\n    Requirements:";
-										countryInfo.requirements.forEach((req: any) => {
-											formattedImmigrationInfo += `\n      - ${req.requirement || "N/A"} (${req.response_type || "N/A"})`;
-										});
-									} else {
-										formattedImmigrationInfo += "\n    No specific requirements listed for this country.";
-									}
-								}
+					immigrationInfo.data.data.forEach((service:any) => {
+					  formattedImmigrationInfo += `\n🏛️ Service: ${service.name || "N/A"}`;
+					  formattedImmigrationInfo += `\n📄 Description: ${service.description || "N/A"}`;
+					  formattedImmigrationInfo += `\n💬 Consultation Note: ${service.consultation_note || "N/A"}`;
+					  
+					  if (Array.isArray(service.countries) && service.countries.length > 0) {
+						// Iterate through each country for this service
+						service.countries.forEach((country:any) => {
+						  formattedImmigrationInfo += `\n🌍 Country: ${country.country_code || "N/A"}`;
+						  formattedImmigrationInfo += `\n💰 Consultation Fee: $${country.consultation_fee || "N/A"}`;
+						  formattedImmigrationInfo += `\n💰 Service Fee: $${country.service_fee || "N/A"}`;
+						  
+						  if (Array.isArray(country.requirements) && country.requirements.length > 0) {
+							formattedImmigrationInfo += "\n✅ Requirements:";
+							country.requirements.forEach((req:any) => {
+							  formattedImmigrationInfo += `\n  - ${req.requirement || "N/A"} (${req.response_type || "N/A"})`;
 							});
-						} else {
-							formattedImmigrationInfo += "\n  No country-specific information available.";
-						}
+						  } else {
+							formattedImmigrationInfo += "\nNo specific requirements listed for this country.";
+						  }
+						  formattedImmigrationInfo += "\n"; // Add spacing between countries
+						});
+					  } else {
+						formattedImmigrationInfo += "\nNo country-specific information available.";
+					  }
+					  formattedImmigrationInfo += "\n---\n"; // Add separator between services
 					});
-				} else {
-					formattedImmigrationInfo +=
-						"No specific immigration information found for this country.";
-				}
+				  } else {
+					formattedImmigrationInfo += "No specific immigration information found for this country.";
+				  }
 			} else {
 				formattedImmigrationInfo +=
 					"Could not retrieve detailed immigration information.";
