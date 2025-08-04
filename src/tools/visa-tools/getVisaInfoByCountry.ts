@@ -70,6 +70,24 @@ export const getVisaInfoByCountry = {
 					formattedOutput += `\n  Government Fee: ${type.government_fee || "N/A"}`;
 					formattedOutput += `\n  Entry Type: ${type.entry_type || "N/A"}`;
 					formattedOutput += `\n  Validity Period: ${type.validity_period || "N/A"} days`;
+					if (type.keyRequirements && type.keyRequirements.length > 0) {
+						formattedOutput += "\n    Key Requirements:";
+						type.keyRequirements.forEach((req: any) => {
+							formattedOutput += `\n    - ${req.requirement || "N/A"}`;
+						});
+					}
+					if (type.benefits && type.benefits.length > 0) {
+						formattedOutput += "\n    Benefits:";
+						type.benefits.forEach((benefit: any) => {
+							formattedOutput += `\n    - ${benefit.benefit || "N/A"}`;
+						});
+					}
+					if (type.additionalRequirements && type.additionalRequirements.length > 0) {
+						formattedOutput += "\n    Additional Requirements:";
+						type.additionalRequirements.forEach((additionalRequirements: any) => {
+							formattedOutput += `\n    - ${additionalRequirements.question || "N/A"}`;
+						});
+					}
 					});
 				}
 
