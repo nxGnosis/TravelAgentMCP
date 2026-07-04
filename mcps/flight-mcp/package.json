@@ -1,0 +1,32 @@
+{
+	"name": "@travelagent-mcp/flight-mcp",
+	"version": "1.0.0",
+	"description": "MCP server for TVA OTA flight search, pricing, seat selection and booking lifecycle.",
+	"type": "module",
+	"bin": {
+		"tva-flight-mcp": "dist/index.js"
+	},
+	"exports": {
+		"./tools": "./dist/tools.js"
+	},
+	"files": ["dist"],
+	"scripts": {
+		"build": "tsc && shx chmod +x dist/index.js",
+		"watch": "tsc --watch",
+		"start": "node dist/index.js",
+		"format": "biome format . --write",
+		"lint": "biome check ."
+	},
+	"dependencies": {
+		"@travelagent-mcp/shared": "workspace:*",
+		"better-sqlite3": "^12.5.0",
+		"fastmcp": "^3.8.4",
+		"zod": "^4.0.0"
+	},
+	"devDependencies": {
+		"@types/better-sqlite3": "^7.6.13",
+		"@types/node": "^22.17.0",
+		"shx": "^0.4.0",
+		"typescript": "^5.8.3"
+	}
+}

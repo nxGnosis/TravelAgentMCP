@@ -10,3 +10,6 @@ Thumbs.db
 
 # Environment variables
 .env
+
+# Local runtime SQLite databases (flight-mcp's offer cache, etc.)
+*.db

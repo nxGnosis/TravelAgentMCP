@@ -1,18 +1,15 @@
 {
 	"name": "travelagent-mcp",
-	"version": "1.1.0",
-	"description": "This MCP is design to help with posting and other activities on Twitter, Instagram, Facebook, WhatsApp, Discord and Telegram ",
+	"version": "2.0.0",
+	"description": "TVA OTA MCP server suite — flight, hotel, visa, immigration and account tools for AI travel agents. This package is the all-in-one gateway; see mcps/* for individually deployable domain servers.",
 	"main": "src/index.ts",
 	"type": "module",
 	"bin": {
 		"travelagent-mcp": "dist/index.js"
 	},
-	"files": [
-		"dist"
-	],
+	"files": ["dist"],
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "tsc && shx chmod +x dist/index.js",
+		"build": "pnpm -r --workspace-concurrency=1 build && tsc && shx chmod +x dist/index.js",
 		"prepare": "husky",
 		"watch": "tsc --watch",
 		"start": "node dist/index.js",
@@ -27,10 +24,6 @@
 		".": {
 			"import": "./src/index.ts",
 			"require": "./src/index.js"
-		},
-		"./tool-selector": {
-			"import": "./src/tool-selector.ts",
-			"require": "./src/tool-selector.js"
 		}
 	},
 	"repository": {
@@ -41,23 +34,21 @@
 		"url": "https://github.com/nxGnosis/travelagent-mcp/issues"
 	},
 	"homepage": "https://github.com/nxGnosis/travelagent-mcp#readme",
-	"keywords": [
-		"mcp",
-		"Visa MCP",
-		"Travel agent"
-	],
+	"keywords": ["mcp", "travel", "flights", "hotels", "visa", "immigration", "amadeus"],
 	"author": "Lanre Sanni",
 	"license": "ISC",
 	"packageManager": "pnpm@10.7.1",
 	"dependencies": {
-		"@biomejs/biome": "*",
-		"dedent": "^1.6.0",
+		"@travelagent-mcp/account-mcp": "workspace:*",
+		"@travelagent-mcp/flight-mcp": "workspace:*",
+		"@travelagent-mcp/hotel-mcp": "workspace:*",
+		"@travelagent-mcp/immigration-mcp": "workspace:*",
+		"@travelagent-mcp/shared": "workspace:*",
+		"@travelagent-mcp/visa-mcp": "workspace:*",
 		"dotenv": "^17.2.0",
 		"fastmcp": "^3.8.4",
 		"shx": "^0.4.0",
-		"ts-node-dev": "^2.0.0",
-		"typescript": "^5.8.3",
-		"zod": "^4.0.0"
+		"typescript": "^5.8.3"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "*",
@@ -65,7 +56,7 @@
 		"@types/node": "^22.17.0",
 		"husky": "^9.1.7",
 		"lint-staged": "^15.0.0",
-		"shx": "^0.3.4",
+		"shx": "^0.4.0",
 		"typescript": "^5.8.3"
 	}
 }

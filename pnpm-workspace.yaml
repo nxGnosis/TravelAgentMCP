@@ -1,0 +1,6 @@
+packages:
+  - mcps/*
+
+onlyBuiltDependencies:
+  - "@biomejs/biome"
+  - better-sqlite3

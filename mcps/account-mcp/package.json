@@ -1,0 +1,30 @@
+{
+	"name": "@travelagent-mcp/account-mcp",
+	"version": "1.0.0",
+	"description": "MCP server for TVA OTA user account: auth, profile, promo codes, notifications.",
+	"type": "module",
+	"bin": {
+		"tva-account-mcp": "dist/index.js"
+	},
+	"exports": {
+		"./tools": "./dist/tools.js"
+	},
+	"files": ["dist"],
+	"scripts": {
+		"build": "tsc && shx chmod +x dist/index.js",
+		"watch": "tsc --watch",
+		"start": "node dist/index.js",
+		"format": "biome format . --write",
+		"lint": "biome check ."
+	},
+	"dependencies": {
+		"@travelagent-mcp/shared": "workspace:*",
+		"fastmcp": "^3.8.4",
+		"zod": "^4.0.0"
+	},
+	"devDependencies": {
+		"@types/node": "^22.17.0",
+		"shx": "^0.4.0",
+		"typescript": "^5.8.3"
+	}
+}
