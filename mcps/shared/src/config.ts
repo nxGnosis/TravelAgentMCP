@@ -37,23 +37,18 @@ export function getTvaConfig(): TvaConfig {
 	};
 }
 
-/** The visa/immigration *content* API (country requirements, fees, FAQs) — a separate service from the TVA OTA booking backend. */
-export function getVisaContentConfig(): ContentApiConfig {
+/** The visa/immigration *content* API (country requirements, fees, FAQs) — same TVA backend, x-api-key auth instead of the bearer session token. */
+function getContentConfig(): ContentApiConfig {
 	return {
-		baseUrl: (
-			process.env.VISA_CONTENT_API_BASE_URL ??
-			"https://agile-scrubland-71136-72b75abf9926.herokuapp.com/api/v1"
-		).replace(/\/+$/, ""),
-		apiKey: process.env.VISA_CONTENT_API_KEY ?? "",
+		baseUrl: (process.env.TVA_BASE_URL ?? "http://localhost:8000").replace(/\/+$/, ""),
+		apiKey: process.env.CONTENT_API_KEY ?? "",
 	};
 }
 
+export function getVisaContentConfig(): ContentApiConfig {
+	return getContentConfig();
+}
+
 export function getImmigrationContentConfig(): ContentApiConfig {
-	return {
-		baseUrl: (
-			process.env.IMMIGRATION_CONTENT_API_BASE_URL ??
-			"https://agile-scrubland-71136-72b75abf9926.herokuapp.com/api/v1"
-		).replace(/\/+$/, ""),
-		apiKey: process.env.IMMIGRATION_CONTENT_API_KEY ?? "",
-	};
+	return getContentConfig();
 }

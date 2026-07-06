@@ -22,12 +22,12 @@ Each `mcps/*` package is an independently runnable stdio MCP server with its own
 for an advisory bot), or run the root **gateway** (`travelagent-mcp`) to get everything in one process — this is
 what the published npm package has always been, kept for backward compatibility.
 
-Two upstream APIs are involved:
+One upstream API, two auth modes:
 
 - **TVA OTA backend** (`TVA_BASE_URL`) — flights, hotels, bookings, account, and the "client" side of visa/immigration
   booking tracking (updates, notifications, transactions). Most booking-management endpoints require a bearer token;
   guest checkout flows (book, cancel-by-UUID, verify, resend-ticket) do not.
-- **Visa/Immigration content API** (`VISA_CONTENT_API_*` / `IMMIGRATION_CONTENT_API_*`) — a separate service for
+- **Visa/Immigration content** (same `TVA_BASE_URL`, authenticated via `CONTENT_API_KEY` instead of a bearer token) —
   country requirements, visa types, fees and FAQs, used only by `GET_VISA_INFO_BY_COUNTRY` /
   `GET_IMMIGRATION_INFO_BY_COUNTRY`.
 
