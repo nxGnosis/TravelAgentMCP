@@ -2,7 +2,7 @@ import { tvaRequest } from "@travelagent-mcp/shared";
 
 export const flightBookingService = {
 	book: (payload: unknown) =>
-		tvaRequest<any>("/api/v1/flights/book", { auth: "none", method: "POST", body: payload }),
+		tvaRequest<any>("/api/v1/flights/book", { auth: "optional", method: "POST", body: payload }),
 
 	listBookings: (perPage?: number) =>
 		tvaRequest<any>("/api/v1/flights/bookings", { auth: "bearer", query: { per_page: perPage } }),
@@ -17,7 +17,7 @@ export const flightBookingService = {
 
 	seatPrice: (tvaId: string, seatNumber: string, segmentIndex: number) =>
 		tvaRequest<any>(`/api/v1/flights/bookings/${tvaId}/seat-price`, {
-			auth: "none",
+			auth: "optional",
 			query: { seat_number: seatNumber, segment_index: segmentIndex },
 		}),
 
@@ -26,7 +26,7 @@ export const flightBookingService = {
 		body: { traveler_id: string; segment_id: string; seat_number: string; paystack_reference?: string },
 	) =>
 		tvaRequest<any>(`/api/v1/flights/bookings/${tvaId}/select-seat`, {
-			auth: "none",
+			auth: "optional",
 			method: "POST",
 			body,
 		}),
@@ -36,7 +36,7 @@ export const flightBookingService = {
 
 	confirmPayment: (tvaId: string, paystackReference: string) =>
 		tvaRequest<any>(`/api/v1/flights/bookings/${tvaId}/confirm-payment`, {
-			auth: "none",
+			auth: "optional",
 			method: "POST",
 			body: { paystack_reference: paystackReference },
 		}),

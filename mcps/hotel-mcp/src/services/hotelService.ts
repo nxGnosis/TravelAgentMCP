@@ -11,7 +11,7 @@ export const hotelService = {
 		tvaRequest<any>(`/api/v1/hotels/amadeus/availability/${hotelOfferId}`, { auth: "none" }),
 
 	book: (payload: unknown) =>
-		tvaRequest<any>("/api/v1/hotels/amadeus/book", { auth: "none", method: "POST", body: payload }),
+		tvaRequest<any>("/api/v1/hotels/amadeus/book", { auth: "optional", method: "POST", body: payload }),
 
 	listBookings: (perPage?: number) =>
 		tvaRequest<any>("/api/v1/hotels/bookings", { auth: "bearer", query: { per_page: perPage } }),
@@ -20,11 +20,11 @@ export const hotelService = {
 
 	confirmPayment: (hotelTvaId: string, paystackReference: string) =>
 		tvaRequest<any>(`/api/v1/hotels/bookings/${hotelTvaId}/confirm-payment`, {
-			auth: "bearer",
+			auth: "optional",
 			method: "POST",
 			body: { paystack_reference: paystackReference },
 		}),
 
 	cancel: (hotelCancelUuid: string) =>
-		tvaRequest<any>(`/api/v1/hotels/bookings/${hotelCancelUuid}/cancel`, { auth: "none", method: "DELETE" }),
+		tvaRequest<any>(`/api/v1/hotels/bookings/${hotelCancelUuid}/cancel`, { auth: "optional", method: "DELETE" }),
 };

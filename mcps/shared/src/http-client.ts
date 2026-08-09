@@ -8,8 +8,8 @@ export interface TvaRequestOptions {
 	method?: Method;
 	query?: Record<string, string | number | boolean | undefined>;
 	body?: unknown;
-	/** "bearer" requires a logged-in session token; "none" is a guest-accessible endpoint. */
-	auth: "bearer" | "none";
+	/** "bearer" requires a logged-in session token; "none" is a guest-accessible endpoint; "optional" passes the token if available without requiring it. */
+	auth: "bearer" | "none" | "optional";
 }
 
 const RETRYABLE_STATUS = new Set([429, 502, 503, 504]);
@@ -47,7 +47,7 @@ export async function tvaRequest<T = unknown>(path: string, options: TvaRequestO
 		Accept: "application/json",
 	};
 	if (options.body !== undefined) headers["Content-Type"] = "application/json";
-	if (options.auth === "bearer" && config.accessToken) {
+	if ((options.auth === "bearer" || options.auth === "optional") && config.accessToken) {
 		headers.Authorization = `Bearer ${config.accessToken}`;
 	}
 
@@ -71,7 +71,13 @@ export async function tvaRequest<T = unknown>(path: string, options: TvaRequestO
 
 			if (!response.ok) {
 				const data = await response.json().catch(() => undefined);
-				if (RETRYABLE_STATUS.has(response.status) && attempt <= config.maxRetries) {
+				const willRetry = RETRYABLE_STATUS.has(response.status) && attempt <= config.maxRetries;
+				debugLog(`${options.method ?? "GET"} ${path} ← ${response.status}${willRetry ? ` (retry ${attempt}/${config.maxRetries})` : " (giving up)"}`, {
+					status: response.status,
+					message: (data as { message?: string })?.message,
+					body: data,
+				});
+				if (willRetry) {
 					await sleep(2 ** attempt * 500);
 					continue;
 				}
@@ -82,13 +88,20 @@ export async function tvaRequest<T = unknown>(path: string, options: TvaRequestO
 				);
 			}
 
-			return (await response.json()) as T;
+			const json = (await response.json()) as T;
+			debugLog(`${options.method ?? "GET"} ${path} ← ${response.status} ok`, { status: response.status });
+			return json;
 		} catch (err) {
 			clearTimeout(timer);
 			if (err instanceof TvaApiError) throw err;
 
 			const isAbort = err instanceof Error && err.name === "AbortError";
-			if (attempt <= config.maxRetries) {
+			const willRetry = attempt <= config.maxRetries;
+			debugLog(`${options.method ?? "GET"} ${path} ✕ ${isAbort ? "timeout" : "network"}${willRetry ? ` (retry ${attempt}/${config.maxRetries})` : " (giving up)"}`, {
+				error: isAbort ? `timed out after ${config.timeoutMs}ms` : (err as Error).message,
+				url,
+			});
+			if (willRetry) {
 				await sleep(2 ** attempt * 500);
 				continue;
 			}
