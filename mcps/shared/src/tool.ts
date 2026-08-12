@@ -54,6 +54,13 @@ function formatToolError(toolName: string, err: unknown): string {
 	if (err instanceof TvaApiError) {
 		if (err.status === 404) return `Not found: no matching record for this request.`;
 		if (err.status === 401 || err.status === 403) {
+			// Check if this is an "email not verified" error
+			const details = typeof err.data === "object" && err.data !== null
+				? (err.data as { details?: string }).details
+				: undefined;
+			if (details?.toLowerCase().includes('email not verified')) {
+				return `🔒 Email not verified. Please check your email for a verification code and use VERIFY_OTP, or use RESEND_OTP to get a new code.`;
+			}
 			return `🔒 Not authorized for this action — the session may have expired. Please log in again.`;
 		}
 		if (err.status === 422) {
