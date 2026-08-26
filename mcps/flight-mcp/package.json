@@ -9,7 +9,9 @@
 	"exports": {
 		"./tools": "./dist/tools.js"
 	},
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"build": "tsc && shx chmod +x dist/index.js",
 		"watch": "tsc --watch",
@@ -21,7 +23,7 @@
 		"@travelagent-mcp/shared": "workspace:*",
 		"better-sqlite3": "^12.5.0",
 		"fastmcp": "^3.8.4",
-		"zod": "^4.0.0"
+		"zod": "^4.4.3"
 	},
 	"devDependencies": {
 		"@types/better-sqlite3": "^7.6.13",
