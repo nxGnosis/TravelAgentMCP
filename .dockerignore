@@ -1,0 +1,6 @@
+node_modules
+mcps/*/node_modules
+dist
+mcps/*/dist
+.git
+.env
