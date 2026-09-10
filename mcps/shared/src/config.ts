@@ -28,8 +28,14 @@ export function getTvaConfig(): TvaConfig {
 	return {
 		baseUrl: (process.env.TVA_BASE_URL ?? "http://localhost:8000").replace(/\/+$/, ""),
 		accessToken: process.env.TVA_ACCESS_TOKEN || undefined,
-		timeoutMs: envInt("TVA_API_TIMEOUT_MS", 15_000),
-		maxRetries: envInt("TVA_MAX_RETRIES", 2),
+		// Worst case per call is timeoutMs × (maxRetries+1) + backoff between attempts
+		// (2^attempt × 500ms) — the old 15s/2-retry defaults meant a single slow/down
+		// upstream call could burn up to ~48s on its own, blowing any latency budget
+		// before the booking flow even gets to its second tool call. Tightened so one
+		// call's worst case (~17s) still fits inside a 30-40s end-to-end booking target,
+		// while keeping ONE retry so a genuine transient blip still recovers.
+		timeoutMs: envInt("TVA_API_TIMEOUT_MS", 8_000),
+		maxRetries: envInt("TVA_MAX_RETRIES", 1),
 		rateLimit: {
 			max: envInt("TVA_RATE_LIMIT_MAX_CALLS", 30),
 			windowMs: envInt("TVA_RATE_LIMIT_WINDOW_MS", 60_000),
